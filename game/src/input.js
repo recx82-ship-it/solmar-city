@@ -1,106 +1,117 @@
-// Keyboard and mouse input. Held keys give a steering vector; one-shot presses
-// (enter a car, punch, reload, pause, confirm) are queued as bit flags and taken once
-// by the loop, so a press between two frames is never lost and never counted twice.
-// The live `state` object is exposed so scripted tests can drive the game too.
+// Keyboard and mouse input. Held keys give movement; one-shot presses (enter
+// a car, punch, pause, mute) are queued as flags and taken once by the loop,
+// so a press between two frames is never lost and never counted twice. The
+// mouse position is kept in screen space; the game converts it to world aim.
 
-export const ACTION_CONFIRM = 1;
-export const ACTION_ENTER = 2;
-export const ACTION_PUNCH = 4;
-export const ACTION_RELOAD = 8;
-export const ACTION_PAUSE = 16;
-export const ACTION_MUTE = 32;
+export const ACTION_ENTER = 1;
+export const ACTION_PUNCH = 2;
+export const ACTION_PAUSE = 4;
+export const ACTION_MUTE = 8;
+export const ACTION_CONFIRM = 16;
+export const ACTION_HELP = 32;
 
 const UP = new Set(['ArrowUp', 'KeyW']);
 const DOWN = new Set(['ArrowDown', 'KeyS']);
 const LEFT = new Set(['ArrowLeft', 'KeyA']);
 const RIGHT = new Set(['ArrowRight', 'KeyD']);
-const RUN = new Set(['ShiftLeft', 'ShiftRight']);
-const CONFIRM = new Set(['Space', 'Enter']);
-const ENTER = new Set(['KeyE']);
-const PUNCH = new Set(['KeyF']);
-const RELOAD = new Set(['KeyR']);
-const PAUSE = new Set(['KeyP', 'Escape']);
-const MUTE = new Set(['KeyM']);
 
 export function createInput(canvas) {
-  const state = {
-    up: false,
-    down: false,
-    left: false,
-    right: false,
-    run: false,
-    fire: false,
-    aimX: 0,
-    aimY: 0,
-    aimScreenX: 0,
-    aimScreenY: 0,
-  };
+  let up = false;
+  let down = false;
+  let left = false;
+  let right = false;
+  let run = false;
+  let shoot = false;
   let actions = 0;
+  const mouse = { x: 0, y: 0, inside: false };
 
-  window.addEventListener('keydown', (event) => {
-    if (UP.has(event.code)) state.up = true;
-    else if (DOWN.has(event.code)) state.down = true;
-    else if (LEFT.has(event.code)) state.left = true;
-    else if (RIGHT.has(event.code)) state.right = true;
-    else if (RUN.has(event.code)) state.run = true;
-    else if (CONFIRM.has(event.code)) {
-      if (!event.repeat) actions |= ACTION_CONFIRM;
-    } else if (ENTER.has(event.code)) {
+  function onKeyDown(event) {
+    if (UP.has(event.code)) up = true;
+    else if (DOWN.has(event.code)) down = true;
+    else if (LEFT.has(event.code)) left = true;
+    else if (RIGHT.has(event.code)) right = true;
+    else if (event.code === 'ShiftLeft' || event.code === 'ShiftRight') run = true;
+    else if (event.code === 'KeyE') {
       if (!event.repeat) actions |= ACTION_ENTER;
-    } else if (PUNCH.has(event.code)) {
+    } else if (event.code === 'KeyF') {
       if (!event.repeat) actions |= ACTION_PUNCH;
-    } else if (RELOAD.has(event.code)) {
-      if (!event.repeat) actions |= ACTION_RELOAD;
-    } else if (PAUSE.has(event.code)) {
+    } else if (event.code === 'KeyP' || event.code === 'Escape') {
       if (!event.repeat) actions |= ACTION_PAUSE;
-    } else if (MUTE.has(event.code)) {
+    } else if (event.code === 'KeyM') {
       if (!event.repeat) actions |= ACTION_MUTE;
+    } else if (event.code === 'Space' || event.code === 'Enter') {
+      if (!event.repeat) actions |= ACTION_CONFIRM;
+    } else if (event.code === 'KeyH') {
+      if (!event.repeat) actions |= ACTION_HELP;
     } else return;
     event.preventDefault();
-  });
-  window.addEventListener('keyup', (event) => {
-    if (UP.has(event.code)) state.up = false;
-    else if (DOWN.has(event.code)) state.down = false;
-    else if (LEFT.has(event.code)) state.left = false;
-    else if (RIGHT.has(event.code)) state.right = false;
-    else if (RUN.has(event.code)) state.run = false;
-  });
-  // A key released while the tab is hidden never sends keyup: let go of everything on blur.
+  }
+
+  function onKeyUp(event) {
+    if (UP.has(event.code)) up = false;
+    else if (DOWN.has(event.code)) down = false;
+    else if (LEFT.has(event.code)) left = false;
+    else if (RIGHT.has(event.code)) right = false;
+    else if (event.code === 'ShiftLeft' || event.code === 'ShiftRight') run = false;
+  }
+
+  window.addEventListener('keydown', onKeyDown);
+  window.addEventListener('keyup', onKeyUp);
+  // A key released while the tab is hidden never sends keyup.
   window.addEventListener('blur', () => {
-    state.up = state.down = state.left = state.right = state.run = state.fire = false;
+    up = false;
+    down = false;
+    left = false;
+    right = false;
+    run = false;
+    shoot = false;
   });
-  canvas.addEventListener('pointermove', (event) => {
+  canvas.addEventListener('mousemove', (event) => {
     const rect = canvas.getBoundingClientRect();
-    state.aimScreenX = event.clientX - rect.left;
-    state.aimScreenY = event.clientY - rect.top;
+    mouse.x = event.clientX - rect.left;
+    mouse.y = event.clientY - rect.top;
+    mouse.inside = true;
   });
-  canvas.addEventListener('pointerdown', (event) => {
-    if (event.button === 0) state.fire = true;
-    const rect = canvas.getBoundingClientRect();
-    state.aimScreenX = event.clientX - rect.left;
-    state.aimScreenY = event.clientY - rect.top;
+  canvas.addEventListener('mousedown', (event) => {
+    if (event.button === 0) {
+      shoot = true;
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = event.clientX - rect.left;
+      mouse.y = event.clientY - rect.top;
+      mouse.inside = true;
+    }
   });
-  window.addEventListener('pointerup', (event) => {
-    if (event.button === 0) state.fire = false;
+  window.addEventListener('mouseup', () => {
+    shoot = false;
   });
 
   return {
-    state,
-    /** The held-key steering vector, each component -1, 0 or 1. */
-    steer() {
+    /** Held movement keys, as -1/0/1 on each axis. */
+    move() {
       return {
-        x: (state.right ? 1 : 0) - (state.left ? 1 : 0),
-        y: (state.down ? 1 : 0) - (state.up ? 1 : 0),
+        up,
+        down,
+        left,
+        right,
+        run,
+        shoot,
       };
     },
+    mouse,
     /** The one-shot presses since the last call, as ACTION_* flags. */
     takeActions() {
       const taken = actions;
       actions = 0;
       return taken;
     },
-    queueAction(flag) {
-      actions |= flag;
+    /** Test hook: pretend a key is held. */
+    debugSet(key, value) {
+      if (key === 'up') up = value;
+      else if (key === 'down') down = value;
+      else if (key === 'left') left = value;
+      else if (key === 'right') right = value;
+      else if (key === 'run') run = value;
+      else if (key === 'shoot') shoot = value;
     },
   };
 }
