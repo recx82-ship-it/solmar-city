@@ -1,88 +1,98 @@
-# Solmar City — an open-world crime game
+# Solmar City
 
-[![make.fun · gta6-01](https://make.fun/badge/gta6-01.svg)](https://make.fun/bounty/gta6-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
-[![rank](https://make.fun/badge/gta6-01/recx82-ship-it/solmar-city/rank.svg)](https://make.fun/bounty/gta6-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
-[![reward](https://make.fun/badge/gta6-01/recx82-ship-it/solmar-city/reward.svg)](https://make.fun/bounty/gta6-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
+[![make.fun](https://make.fun/badge/gta6-01.svg)](https://make.fun/bounty/gta6-01)
+[![rank](https://make.fun/badge/gta6-01/recx82-ship-it/solmar-city/rank.svg)](https://make.fun/bounty/gta6-01)
+[![reward](https://make.fun/badge/gta6-01/recx82-ship-it/solmar-city/reward.svg)](https://make.fun/bounty/gta6-01)
 
-**Solmar City** is a complete open-world crime game in the spirit of GTA 6, built
-for make.fun's ["Make GTA 6" bounty](https://make.fun/bounty/gta6-01) ($1,666).
-It runs offline in a desktop browser from static files — no build step, no
-network request, keyboard and mouse.
+**Solmar City** is a complete 2D top-down open-world crime game that runs in a
+desktop browser from static files — no libraries, no network requests, no
+build step. It was built for the [make.fun GTA 6 bounty](https://make.fun/bounty/gta6-01).
 
-You are Jax Mercer, new in Solmar City — a sun-soaked coastal town with a beach,
-a harbour, a park and a police force that does not like you. Mara Voss, the
-fixer on the marina, has five jobs for you: steal a car, run a pickup, settle
-some loose ends, lose a three-star wanted level, and steal a shipment truck
-from the harbour. Between jobs the city is yours: steal any car, buy ammo at
-Lock & Load, get a fresh paint job at Sunset Paint & Spray to clear the heat,
-or just cruise the beach road at golden hour.
+Jax Mercer came back to Solmar City with nothing but a duffel bag and a name
+the old crews still remember. Fixer Mara Voss has five jobs for him, the
+Solmar PD has five stars with his name on them, and the whole sun-soaked city
+is open from the first minute: drive it, walk it, steal from it.
 
-## What is in the game
+## What is in the city
 
-- **A city on foot and by car** — a 3200×2400 road grid with buildings, a park,
-  a beach and ocean, and a harbour, all generated from a seed.
-- **Traffic and pedestrians** — cars that drive the grid and turn at
-  intersections, people who walk the sidewalks and run from trouble.
-- **Cars to steal** — parked cars, traffic cars (the driver bails), even a
-  police car if you dare. Driving is arcade: throttle, steering, slides.
-- **A wanted level and police** — five stars. Crimes raise the heat; police
-  cars chase your last seen position and ram, officers on foot try to arrest
-  you. Break line of sight and stay quiet and the heat cools off.
-- **Missions and a story** — five jobs for Mara Voss with objectives, a
-  waypoint arrow, minimap blips and a mission marker in the world.
-- **Combat** — a pistol with mouse aim, a reload, and a punch for close work.
-  Mission enemies shoot back.
-- **A HUD with a minimap** — money, health, wanted stars, the clock, the
-  objective, speed, ammo, and a live minimap with police and mission blips.
-- **A start and a save** — title screen, pause menu, and a save in
-  localStorage that keeps your money, health, ammo and mission progress.
-- **Polish** — a day cycle (golden afternoon, purple dusk, dark night with
-  headlights and lit windows), particles, and synthesised WebAudio sound:
-  engine hum, sirens, gunshots, and a quiet bass-and-pad drive loop.
+- **A real open world** — a 5200×5200 grid city with downtown towers, homes,
+  a park, a marina and a harbor, traffic on every road and pedestrians on
+  every sidewalk, all of it seeded so the same seed deals the same city.
+- **On foot and by car** — run the streets, jack parked cars or pull drivers
+  out of moving traffic, and drive with proper acceleration, steering and
+  drift. Cars can be wrecked; wrecks strand you on foot.
+- **A 5-star wanted level** — steal a car, hit a pedestrian or shoot up the
+  street and the stars climb. Police cruisers spawn, chase and ram you, and
+  the heat only fades once you are out of sight.
+- **Combat** — punch up close, shoot with the mouse, and take on rival crews
+  who shoot back.
+- **Five story missions** — First Wheels, The Drop, Heat Run, Harbor Lights
+  and The Big Score, each with its own objectives, a gold marker guiding you
+  across the map, and a cash payout at the end.
+- **A HUD with a live minimap** — cash, health, wanted stars, clock, mission
+  tracker and a minimap showing roads, the player, police, rivals and the
+  mission marker.
+- **A start screen and a save** — progress (mission, cash, position, time of
+  day) is saved to localStorage when a mission is completed or the run ends,
+  and the title screen offers to continue it.
+- **A day cycle** — the clock runs from morning through dusk to night; the
+  sky tint, lit windows and street lights follow it.
+- **Synthesized sound and music** — engine hum, two-tone sirens, gunshots and
+  a looping bass-and-keys groove, all generated with WebAudio. `M` mutes.
 
-## Controls
+Everything in the game — the city, the characters, the vehicles, the story,
+the art, the sound and the music — is original work. Nothing is taken from
+Rockstar Games.
 
-| Key | Action |
-| --- | --- |
-| WASD / arrows | Walk / drive |
-| Shift | Run |
-| Mouse | Aim (on foot) |
-| Click | Shoot |
-| E | Enter / steal a car, use a shop |
-| F | Punch |
-| R | Reload |
-| P / Esc | Pause (saves) |
-| M | Mute |
-| Space / click | Start, continue |
+## How to play
 
-## Play it
+Serve the `game/` folder and open it in desktop Chrome:
 
 ```sh
 node serve.ts
-# open http://localhost:8080
+# then open http://localhost:8080
 ```
 
-`?seed=N` fixes the city. `?shot=cover|drive|foot|title` stages a screenshot
-scene. `?test=1` runs the scripted play-test and writes its results into the
-page.
+Or open `game/index.html` directly from any static file server.
 
-## Files
+| Key | Action |
+| --- | --- |
+| WASD / Arrows | Move on foot, drive in a car |
+| Shift | Run |
+| E | Enter / steal a car, get out |
+| Mouse click | Shoot (on foot) |
+| F | Punch |
+| P | Pause |
+| M | Mute |
+| H | Help |
 
-- `game/index.html` — the page, canvas and HUD
-- `game/src/config.js` — tuning, palette, constants
-- `game/src/city.js` — the city generator
-- `game/src/entities.js` — the player, cars, pedestrians, physics
-- `game/src/traffic.js` — traffic and pedestrian AI
-- `game/src/police.js` — the wanted level and the Solmar PD
-- `game/src/missions.js` — the five jobs for Mara Voss
-- `game/src/world.js` — the world state and its fixed-step loop
-- `game/src/render.js` — the camera and all the drawing
-- `game/src/hud.js` — the HUD and the minimap
-- `game/src/audio.js` — synthesised WebAudio sound and music
-- `game/src/save.js` — localStorage saves
-- `game/src/shots.js` — the screenshot scenes
-- `game/src/test.js` — the scripted play-test
-- `game/src/main.js` — boot and the game loop
-- `main.ts` — the hand-in program (copies game/ and screenshots/ to /output)
+## Layout
 
-Built by an AI agent for make.fun — see the bounty page for the entry.
+- `game/index.html` — the page; loads the game from `game/src/`.
+- `game/src/main.js` — boot, the fixed-step loop, screens, save/load.
+- `game/src/world.js` — the simulation: player, traffic, pedestrians,
+  police, wanted level, combat, missions, day cycle.
+- `game/src/city.js` — the seeded city: roads, blocks, buildings, parks,
+  harbor and named places.
+- `game/src/render.js` — all drawing: the city, the HUD and the minimap.
+- `game/src/audio.js` — synthesized WebAudio sound and music.
+- `game/src/input.js` — keyboard and mouse.
+- `game/src/shots.js` — the staged screenshot scenes (`?shot=start|drive|chase|mission`).
+- `game/src/config.js` — tuning, palette and the mission scripts.
+- `game/src/random.js` — the seeded random generator.
+- `main.ts` — the entrypoint: copies `game/` and `screenshots/` to
+  `/output` and writes `/output/dossier.json`.
+- `serve.ts` — a tiny static server for local play.
+- `shots.json` — the four screenshot scenes and their URLs.
+
+## Screenshots
+
+The four screenshots in `screenshots/` are real renders of the game's own
+code, staged by `?shot=…` with a fixed seed: the title over the living city,
+driving through downtown, a three-star police chase, and the Harbor Lights
+mission at the docks.
+
+---
+
+Built for [make.fun](https://make.fun) — see the
+[GTA 6 bounty](https://make.fun/bounty/gta6-01).
