@@ -3,58 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
 <title>Solmar City — an open-world crime game</title>
 <style>
-  html, body { margin: 0; height: 100%; overflow: hidden; background: #10131c; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #0a1230; }
   #game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+  /* Read aloud, never shown: the status line screen readers announce. */
   #status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  #hud { position: fixed; inset: 0; pointer-events: none; color: #f4f1e8; }
-  .hud-top { position: absolute; top: 14px; left: 16px; right: 16px; display: flex; justify-content: space-between; align-items: flex-start; }
-  .hud-left { display: flex; flex-direction: column; gap: 6px; }
-  #hud-money { font-size: 30px; font-weight: 800; color: #7ddb7a; text-shadow: 0 2px 4px rgba(0,0,0,0.7); }
-  .hud-health { display: flex; align-items: center; gap: 8px; }
-  .hud-health-bar { width: 170px; height: 14px; background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.35); border-radius: 7px; overflow: hidden; }
-  #hud-health-fill { height: 100%; width: 100%; background: #58d158; }
-  #hud-health-text { font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
-  .hud-right { text-align: right; display: flex; flex-direction: column; gap: 4px; }
-  #hud-stars { font-size: 26px; letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
-  #hud-clock { font-size: 18px; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
-  #hud-objective { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); max-width: 46%; text-align: center; font-size: 17px; font-weight: 700; background: rgba(12,16,26,0.82); border: 1px solid rgba(255,255,255,0.16); border-radius: 10px; padding: 8px 14px; }
-  #hud-minimap { position: absolute; left: 16px; bottom: 16px; width: 200px; height: 150px; border: 2px solid rgba(255,255,255,0.35); border-radius: 8px; background: rgba(12,16,26,0.8); }
-  #hud-prompt { position: absolute; left: 50%; bottom: 96px; transform: translateX(-50%); font-size: 18px; font-weight: 700; background: rgba(12,16,26,0.85); border: 1px solid rgba(255,210,62,0.6); border-radius: 8px; padding: 7px 14px; display: none; }
-  #hud-speed { position: absolute; right: 20px; bottom: 66px; font-size: 26px; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.8); display: none; }
-  #hud-ammo { position: absolute; right: 20px; bottom: 20px; font-size: 18px; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
-  #hud-toasts { position: absolute; top: 76px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; }
-  .toast { background: rgba(12,16,26,0.88); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 7px 14px; font-size: 16px; font-weight: 600; white-space: nowrap; }
-  .toast-good { border-color: #7ddb7a; color: #b9f5b6; }
-  .toast-bad { border-color: #ff5a4e; color: #ffc4bf; }
-  .toast-gold { border-color: #ffd23e; color: #ffe9a8; }
-  .toast-out { opacity: 0; transition: opacity 0.6s; }
-  #test-results { position: fixed; left: 0; top: 0; background: #fff; color: #000; font: 12px monospace; white-space: pre-wrap; z-index: 99; max-width: 90vw; }
 </style>
 </head>
 <body>
-<canvas id="game" aria-label="Solmar City: an open-world crime game. Drive, steal cars, do jobs for Mara Voss, and lose the police."></canvas>
+<canvas id="game" aria-label="Solmar City: an open-world crime game. Steal cars, outrun the police, and run five story missions for Mara Voss."></canvas>
 <p id="status" role="status" aria-live="polite"></p>
-<div id="hud">
-  <div class="hud-top">
-    <div class="hud-left">
-      <div id="hud-money">$120</div>
-      <div class="hud-health"><div class="hud-health-bar"><div id="hud-health-fill"></div></div><span id="hud-health-text">100</span></div>
-    </div>
-    <div class="hud-right">
-      <div id="hud-stars">☆☆☆☆☆</div>
-      <div id="hud-clock">4:00 PM</div>
-    </div>
-  </div>
-  <div id="hud-objective"></div>
-  <div id="hud-toasts"></div>
-  <canvas id="hud-minimap" width="200" height="150"></canvas>
-  <div id="hud-prompt"></div>
-  <div id="hud-speed"></div>
-  <div id="hud-ammo"></div>
-</div>
-<div id="test-results"></div>
 <script type="module" src="./src/main.js"></script>
 </body>
 </html>
